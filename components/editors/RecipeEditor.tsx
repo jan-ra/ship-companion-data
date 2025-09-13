@@ -78,10 +78,10 @@ export function RecipeEditor({
   };
 
   // Helper function to check if a recipe has incomplete translations
-  const hasIncompleteTranslations = (recipeId: number): boolean => {
+  const hasIncompleteTranslations = (recipeId: string | number): boolean => {
     if (!validationResults) return false;
     return validationResults.incompleteItems.some(
-      (item) => item.id === recipeId
+      (item) => item.id === Number(recipeId)
     );
   };
 

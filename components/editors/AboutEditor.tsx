@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Plus, Edit, Info, X, User } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
-import { About, Fact, DataType } from '@/types';
+import { About, Fact, DataType, Language } from '@/types';
 import { EditModal } from '@/components/EditModal';
 
 interface AboutEditorProps {

@@ -7,7 +7,7 @@ export async function loadExistingData(): Promise<UnifiedData> {
 
   // Initialize the structure
   for (const dataType of DATA_TYPES) {
-    unifiedData[dataType] = {} as Record<Language, unknown>;
+    unifiedData[dataType] = {} as any;
   }
 
   // Load data for each language and data type

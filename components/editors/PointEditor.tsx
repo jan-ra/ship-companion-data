@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus, Trash2, Edit, MapPin, ChevronDown, ChevronUp } from 'lucide-react';
 import { useData } from '@/contexts/DataContext';
-import { Point, DataType } from '@/types';
+import { Point, DataType, Language } from '@/types';
 import { MultiLanguageEditModal } from '@/components/MultiLanguageEditModal';
 import { DeletionConfirmModal } from '@/components/DeletionConfirmModal';
 import { useCollapse } from '@/components/DataEditor';
@@ -56,16 +56,16 @@ export function PointEditor({
 
   // Helper function to get city name by ID
   const getCityName = (cityId: number): string => {
-    if (!allData?.cities?.[language]) return `City ${cityId}`;
-    const cities = allData.cities[language];
+    if (!allData?.cities?.[language as Language]) return `City ${cityId}`;
+    const cities = allData.cities[language as Language];
     const city = Array.isArray(cities) ? cities.find(c => c.id === cityId) : null;
     return city ? city.name : `City ${cityId}`;
   };
 
   // Get available cities for the selector
   const getAvailableCities = () => {
-    if (!allData?.cities?.[language]) return [];
-    const cities = allData.cities[language];
+    if (!allData?.cities?.[language as Language]) return [];
+    const cities = allData.cities[language as Language];
     return Array.isArray(cities) ? cities : [];
   };
 
@@ -134,11 +134,11 @@ export function PointEditor({
   };
 
   // Multi-language support functions
-  const handleMultiLanguageSave = (pointData: Record<string, Point>, activeLanguage: string) => {
+  const handleMultiLanguageSave = (pointData: Record<Language, Point>) => {
     if (editingIndex !== null && !isComparison) {
       if (editingIndex >= data.length) {
         // Adding new point - create across all languages using the provided data
-        createDataAcrossLanguages(dataType, activeLanguage as any, pointData[activeLanguage], 'name');
+        createDataAcrossLanguages(dataType, 'en' as any, pointData['en'], 'name');
       } else {
         // Editing existing point - update each language with its respective data
         Object.entries(pointData).forEach(([lang, pointForLang]) => {
@@ -156,14 +156,14 @@ export function PointEditor({
     }
   };
 
-  const getPointForAllLanguages = (basePoint: Point): Record<string, Point> => {
-    const languages = ['en', 'de', 'nl'];
-    const result: Record<string, Point> = {};
+  const getPointForAllLanguages = (basePoint: Point): Record<Language, Point> => {
+    const languages: Language[] = ['en', 'de', 'nl'];
+    const result: Record<Language, Point> = {} as Record<Language, Point>;
     
     languages.forEach(lang => {
       const langData = allData?.[dataType]?.[lang as keyof typeof allData[typeof dataType]];
       if (Array.isArray(langData) && editingIndex !== null && editingIndex < langData.length) {
-        result[lang] = { ...langData[editingIndex] };
+        result[lang] = { ...langData[editingIndex] } as Point;
       } else {
         result[lang] = { ...basePoint };
       }

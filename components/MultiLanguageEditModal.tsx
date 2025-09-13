@@ -129,9 +129,9 @@ export function MultiLanguageEditModal<T>({
                     {/* Validation indicator */}
                     {validateData && touchedLanguages.has(lang.code) && (
                       isLanguageValid(lang.code) ? (
-                        <Check className="w-3 h-3 text-green-600" title="Valid" />
+                        <Check className="w-3 h-3 text-green-600" aria-label="Valid" />
                       ) : (
-                        <AlertCircle className="w-3 h-3 text-red-600" title="Invalid" />
+                        <AlertCircle className="w-3 h-3 text-red-600" aria-label="Invalid" />
                       )
                     )}
                   </div>

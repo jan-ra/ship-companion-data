@@ -46,6 +46,7 @@ export function QuestionEditor({
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [deletingQuestion, setDeletingQuestion] = useState<Question | null>(null);
+  const [deletingIndex, setDeletingIndex] = useState<number | null>(null);
   const [jsonEditMode, setJsonEditMode] = useState(false);
 
   // Helper function to check if a question has incomplete translations
@@ -84,11 +85,11 @@ export function QuestionEditor({
   };
 
   // Multi-language support functions
-  const handleMultiLanguageSave = (questionData: Record<string, Question>, activeLanguage: string) => {
+  const handleMultiLanguageSave = (questionData: Record<Language, Question>) => {
     if (editingIndex !== null && !isComparison) {
       if (editingIndex >= data.length) {
         // Adding new question - create across all languages using the provided data
-        createDataAcrossLanguages(dataType, activeLanguage as Language, questionData[activeLanguage], 'questiontext');
+        createDataAcrossLanguages(dataType, 'en' as Language, questionData['en'], 'questiontext');
       } else {
         // Editing existing question - update each language with its respective data
         Object.entries(questionData).forEach(([lang, questionForLang]) => {
@@ -107,14 +108,14 @@ export function QuestionEditor({
     }
   };
 
-  const getQuestionForAllLanguages = (index: number): Record<string, Question> => {
-    const languages = ['en', 'de', 'nl'];
-    const result: Record<string, Question> = {};
+  const getQuestionForAllLanguages = (index: number): Record<Language, Question> => {
+    const languages: Language[] = ['en', 'de', 'nl'];
+    const result: Record<Language, Question> = {} as Record<Language, Question>;
     
     languages.forEach(lang => {
       const langData = allData?.[dataType]?.[lang as keyof typeof allData[typeof dataType]];
       if (Array.isArray(langData) && index < langData.length) {
-        result[lang] = { ...langData[index] };
+        result[lang] = { ...langData[index] } as Question;
       } else {
         result[lang] = { ...editingQuestion! };
       }
@@ -148,18 +149,21 @@ export function QuestionEditor({
 
   const handleDeleteQuestion = (index: number) => {
     if (isComparison) return;
-    setDeletingQuestion({ ...data[index], deleteIndex: index });
+    setDeletingQuestion({ ...data[index] });
+    setDeletingIndex(index);
   };
 
   const handleConfirmDelete = () => {
-    if (deletingQuestion && 'deleteIndex' in deletingQuestion) {
-      deleteDataByIndexAcrossLanguages(dataType, (deletingQuestion as any).deleteIndex);
+    if (deletingIndex !== null) {
+      deleteDataByIndexAcrossLanguages(dataType, deletingIndex);
       setDeletingQuestion(null);
+      setDeletingIndex(null);
     }
   };
 
   const handleCancelDelete = () => {
     setDeletingQuestion(null);
+    setDeletingIndex(null);
   };
 
   // Create the question form component

@@ -149,7 +149,12 @@ export function DataProvider({ children }: DataProviderProps) {
           updatedDataType[lang] = [];
         }
 
-        const currentArray = [...updatedDataType[lang]];
+        const currentData = updatedDataType[lang];
+        if (!Array.isArray(currentData)) {
+          // Skip non-array data types for createDataAcrossLanguages
+          return;
+        }
+        const currentArray = [...currentData];
         
         if (lang === sourceLanguage) {
           // Add the complete item to the source language
@@ -174,7 +179,7 @@ export function DataProvider({ children }: DataProviderProps) {
           currentArray.push(minimalItem);
         }
         
-        updatedDataType[lang] = currentArray;
+        updatedDataType[lang] = currentArray as any;
       });
 
       const updatedData = {
@@ -212,7 +217,7 @@ export function DataProvider({ children }: DataProviderProps) {
           return String(itemIdValue) !== String(itemId);
         });
         
-        updatedDataType[lang] = filteredArray;
+        updatedDataType[lang] = filteredArray as any;
       });
 
       const updatedData = {
@@ -238,7 +243,7 @@ export function DataProvider({ children }: DataProviderProps) {
         if (index >= 0 && index < currentArray.length) {
           currentArray.splice(index, 1);
         }
-        updatedDataType[lang] = currentArray;
+        updatedDataType[lang] = currentArray as any;
       });
 
       const updatedData = {
@@ -297,8 +302,8 @@ export function DataProvider({ children }: DataProviderProps) {
           // Check each field for emptiness
           Object.keys(item).forEach(key => {
             if (key !== 'id') { // Skip ID field
-              const sourceValue = item[key];
-              const targetValue = correspondingItem[key];
+              const sourceValue = (item as any)[key];
+              const targetValue = (correspondingItem as any)[key];
               
               // Check if field is empty in target language but not in source
               const isSourceEmpty = sourceValue === '' || sourceValue === null || sourceValue === undefined || (Array.isArray(sourceValue) && sourceValue.length === 0);

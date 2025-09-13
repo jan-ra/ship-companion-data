@@ -85,8 +85,7 @@ function DataEditorContent({ dataType, validationResults }: DataEditorProps) {
   const renderEditor = (language: string, isComparison = false, additionalProps = {}) => {
     const editorData = data[dataType][language as Language];
     
-    const commonProps = {
-      data: editorData,
+    const baseProps = {
       language,
       dataType,
       isComparison,
@@ -96,21 +95,21 @@ function DataEditorContent({ dataType, validationResults }: DataEditorProps) {
 
     switch (dataType) {
       case 'recipes':
-        return <RecipeEditor {...commonProps} />;
+        return <RecipeEditor data={editorData as any} {...baseProps} />;
       case 'checklists':
-        return <ChecklistEditor {...commonProps} />;
+        return <ChecklistEditor data={editorData as any} {...baseProps} />;
       case 'cities':
-        return <CityEditor {...commonProps} />;
+        return <CityEditor data={editorData as any} {...baseProps} />;
       case 'points':
-        return <PointEditor {...commonProps} />;
+        return <PointEditor data={editorData as any} {...baseProps} />;
       case 'links':
-        return <LinksEditor {...commonProps} />;
+        return <LinksEditor data={editorData as any} {...baseProps} />;
       case 'about':
-        return <AboutEditor {...commonProps} />;
+        return <AboutEditor data={editorData as any} {...baseProps} />;
       case 'questions':
-        return <QuestionEditor {...commonProps} />;
+        return <QuestionEditor data={editorData as any} {...baseProps} />;
       case 'cabins':
-        return <CabinEditor {...commonProps} />;
+        return <CabinEditor data={editorData as any} {...baseProps} />;
       default:
         return (
           <Card>
