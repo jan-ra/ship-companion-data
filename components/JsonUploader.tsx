@@ -85,26 +85,31 @@ export function JsonUploader() {
     <>
       {!data ? (
         // Show upload button and conditionally show load existing data button
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={handleFileSelect}
-            disabled={loading}
-            variant="outline"
-            className="flex items-center gap-2"
-          >
-            <Upload className="w-4 h-4" />
-            {loading ? "Loading..." : "Upload new file"}
-          </Button>
+        <div className="flex flex-col items-center gap-3">
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={handleFileSelect}
+              disabled={loading}
+              className="flex items-center gap-2"
+            >
+              <Upload className="w-4 h-4" />
+              {loading ? "Loading..." : "Upload Data File"}
+            </Button>
 
-          {hasStoredData() && (
-            <>
-              <span className="text-xs text-muted-foreground">or</span>
-              <Button onClick={handleLoadExistingData} disabled={loading}>
-                <FileJson className="w-4 h-4 mr-2" />
-                Load Existing Data
-              </Button>
-            </>
-          )}
+            {hasStoredData() && (
+              <>
+                <span className="text-xs text-muted-foreground">or</span>
+                <Button onClick={handleLoadExistingData} disabled={loading} variant="outline">
+                  <FileJson className="w-4 h-4 mr-2" />
+                  Load Existing Data
+                </Button>
+              </>
+            )}
+          </div>
+
+          <p className="text-sm text-gray-600 dark:text-gray-400 text-center max-w-md">
+            Upload your data file (e.g., <code className="text-xs bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded">app-data-20250916143045.json</code>) provided by Jan through Google Drive.
+          </p>
         </div>
       ) : (
         // Show upload button only if data is already loaded

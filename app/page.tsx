@@ -57,15 +57,6 @@ function AppContent() {
                 Ship Companion Data Editor
               </h1>
             </div>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              A powerful tool to edit and manage ship companion data with multi-language support, 
-              side-by-side comparison, and JSON export functionality.
-            </p>
-            <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-              <p className="text-sm text-blue-800 dark:text-blue-200 text-center">
-                🚀 <strong>Get started:</strong> Upload your JSON data file below to begin editing. Your data will be stored securely in your browser.
-              </p>
-            </div>
           </div>
 
           <div className="flex flex-col items-center gap-4">
