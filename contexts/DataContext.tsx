@@ -32,6 +32,15 @@ const clearStoredData = () => {
   }
 };
 
+const hasStoredData = (): boolean => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored !== null && stored.trim() !== '';
+  } catch (error) {
+    return false;
+  }
+};
+
 interface DataContextType {
   data: UnifiedData | null;
   selectedDataType: DataType;
@@ -55,6 +64,8 @@ interface DataContextType {
     incompleteItems: Array<{ id: number; missingFields: string[] }>;
   };
   loadData: (jsonData?: string) => Promise<void>;
+  loadStoredData: () => void;
+  hasStoredData: () => boolean;
   resetData: () => void;
 }
 
@@ -334,6 +345,17 @@ export function DataProvider({ children }: DataProviderProps) {
     };
   }, [data]);
 
+  const loadStoredData = useCallback(() => {
+    const storedData = loadDataFromStorage();
+    if (storedData) {
+      setData(storedData);
+    }
+  }, []);
+
+  const checkHasStoredData = useCallback(() => {
+    return hasStoredData();
+  }, []);
+
   const resetData = useCallback(() => {
     setData(null);
     setError(null);
@@ -358,6 +380,8 @@ export function DataProvider({ children }: DataProviderProps) {
     deleteDataByIndexAcrossLanguages,
     validateTranslations,
     loadData,
+    loadStoredData,
+    hasStoredData: checkHasStoredData,
     resetData
   };
 

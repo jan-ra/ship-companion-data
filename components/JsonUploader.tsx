@@ -17,7 +17,7 @@ import {
 
 export function JsonUploader() {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { data, loadData, loading, error } = useData();
+  const { data, loadData, loadStoredData, hasStoredData, loading, error } = useData();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [pendingFile, setPendingFile] = useState<File | null>(null);
 
@@ -78,13 +78,13 @@ export function JsonUploader() {
   };
 
   const handleLoadExistingData = () => {
-    loadData(); // Load from existing files
+    loadStoredData(); // Load from localStorage
   };
 
   return (
     <>
       {!data ? (
-        // Show both options if no data is loaded
+        // Show upload button and conditionally show load existing data button
         <div className="flex items-center gap-2">
           <Button
             onClick={handleFileSelect}
@@ -96,12 +96,15 @@ export function JsonUploader() {
             {loading ? "Loading..." : "Upload new file"}
           </Button>
 
-          <span className="text-xs text-muted-foreground">or</span>
-
-          <Button onClick={handleLoadExistingData} disabled={loading}>
-            <FileJson className="w-4 h-4 mr-2" />
-            Load Existing Data
-          </Button>
+          {hasStoredData() && (
+            <>
+              <span className="text-xs text-muted-foreground">or</span>
+              <Button onClick={handleLoadExistingData} disabled={loading}>
+                <FileJson className="w-4 h-4 mr-2" />
+                Load Existing Data
+              </Button>
+            </>
+          )}
         </div>
       ) : (
         // Show upload button only if data is already loaded

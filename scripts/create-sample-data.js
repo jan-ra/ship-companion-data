@@ -4,7 +4,7 @@ const path = require('path');
 const languages = ['en', 'de', 'nl'];
 const dataTypes = ['recipes', 'checklists', 'cities', 'points', 'links', 'about', 'questions', 'cabins'];
 
-async function createUnifiedData() {
+async function createUnifiedData(sourceFolder = 'avondrood', outputName = 'sample') {
   const unifiedData = {};
 
   // Initialize structure
@@ -15,7 +15,7 @@ async function createUnifiedData() {
   // Load data for each language and data type
   for (const lang of languages) {
     for (const dataType of dataTypes) {
-      const filePath = path.join(__dirname, '..', 'avondrood', 'data', lang, `${dataType}.json`);
+      const filePath = path.join(__dirname, '..', sourceFolder, 'data', lang, `${dataType}.json`);
       
       try {
         if (fs.existsSync(filePath)) {
@@ -37,19 +37,19 @@ async function createUnifiedData() {
   const exportData = {
     exportDate: new Date().toISOString(),
     version: '1.0.0',
-    description: 'Ship Companion Data - Unified Format',
+    description: `Ship Companion Data - Unified Format (${outputName})`,
     data: unifiedData
   };
 
   // Write to file
-  const outputPath = path.join(__dirname, '..', 'sample-unified-data.json');
+  const outputPath = path.join(__dirname, '..', `${outputName}-unified-data.json`);
   fs.writeFileSync(outputPath, JSON.stringify(exportData, null, 2));
-  console.log(`Sample unified data created at: ${outputPath}`);
-  
+  console.log(`${outputName} unified data created at: ${outputPath}`);
+
   // Also create raw data file
-  const rawOutputPath = path.join(__dirname, '..', 'sample-raw-data.json');
+  const rawOutputPath = path.join(__dirname, '..', `${outputName}-raw-data.json`);
   fs.writeFileSync(rawOutputPath, JSON.stringify(unifiedData, null, 2));
-  console.log(`Sample raw data created at: ${rawOutputPath}`);
+  console.log(`${outputName} raw data created at: ${rawOutputPath}`);
 
   return unifiedData;
 }
@@ -73,7 +73,10 @@ function getSampleData(dataType) {
 
 // Run the script
 if (require.main === module) {
-  createUnifiedData()
+  const sourceFolder = process.argv[2] || 'avondrood';
+  const outputName = process.argv[3] || 'sample';
+
+  createUnifiedData(sourceFolder, outputName)
     .then(() => console.log('Done!'))
     .catch(console.error);
 }

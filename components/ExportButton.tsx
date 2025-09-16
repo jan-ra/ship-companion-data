@@ -11,9 +11,11 @@ export function ExportButton() {
 
   const handleExport = () => {
     if (!data) return;
-    
+
     const exportData = createUnifiedExport(data);
-    const filename = `ship-companion-data-${new Date().toISOString().split('T')[0]}.json`;
+    const now = new Date();
+    const timestamp = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}${String(now.getSeconds()).padStart(2, '0')}`;
+    const filename = `app-data-${timestamp}.json`;
     downloadJSON(exportData, filename);
   };
 
